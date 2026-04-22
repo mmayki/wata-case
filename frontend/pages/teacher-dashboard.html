@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Дневник учителя</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/teacher.css">
+</head>
+<body>
+    <div class="container">
+        <div class="flex-between">
+            <div>
+                <div class="header">👩‍🏫 <span id="userName"></span></div>
+                <div class="badge">Учитель</div>
+            </div>
+            <button id="logoutBtn" class="btn btn-outline" style="width: auto;">Выйти</button>
+        </div>
+        
+        <div class="card">
+            <strong>➕ Поставить оценку</strong>
+            <div class="grade-form">
+                <select id="studentSelect"></select>
+                <input type="text" id="gradeSubject" placeholder="Предмет">
+                <select id="gradeValue">
+                    <option value="5">5 - Отлично</option>
+                    <option value="4">4 - Хорошо</option>
+                    <option value="3">3 - Удовлетворительно</option>
+                    <option value="2">2 - Неудовлетворительно</option>
+                </select>
+                <button id="addGradeBtn" class="btn">Поставить оценку</button>
+            </div>
+        </div>
+        
+        <div class="card">
+            <strong>📝 Задать домашнее задание</strong>
+            <div class="grade-form">
+                <select id="classSelect">
+                    <option value="7А">7А класс</option>
+                    <option value="7Б">7Б класс</option>
+                    <option value="8А">8А класс</option>
+                </select>
+                <input type="text" id="homeworkSubject" placeholder="Предмет">
+                <textarea id="homeworkDesc" rows="3" placeholder="Описание задания..."></textarea>
+                <input type="date" id="dueDate">
+                <button id="addHomeworkBtn" class="btn">Задать домашнее задание</button>
+            </div>
+        </div>
+        
+        <div class="card">
+            <strong>📖 Текущие задания</strong>
+            <div id="homeworkPreview" style="margin-top: 12px;"></div>
+        </div>
+    </div>
+    
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/teacher.js"></script>
+</body>
+</html>

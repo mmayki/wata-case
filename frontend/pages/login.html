@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>Вход</title>
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/login.css" />
+  </head>
+  <body>
+    <div class="login-container">
+      <div class="login-card">
+        <div class="login-icon">📚</div>
+        <h1 class="header" style="text-align: center">Школьный дневник</h1>
+        <div class="subtitle" style="text-align: center">
+          Войдите в свой аккаунт
+        </div>
+
+        <div id="errorMessage" class="error-message"></div>
+
+        <input
+          type="text"
+          id="username"
+          class="input"
+          placeholder="Логин"
+          autocomplete="off"
+        />
+        <input
+          type="password"
+          id="password"
+          class="input"
+          placeholder="Пароль"
+        />
+
+        <button id="loginBtn" class="btn">Войти</button>
+
+        <div class="demo-info">
+          <strong>📝 Демо-доступ:</strong><br />
+          Ученик: alice / 123<br />
+          Учитель: teacher1 / admin
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+  </body>
+</html>

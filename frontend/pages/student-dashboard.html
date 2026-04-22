@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Дневник ученика</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/student.css">
+</head>
+<body>
+    <div class="container">
+        <div class="flex-between" style="margin-bottom: 20px;">
+            <div>
+                <div class="header">👩‍🎓 <span id="userName"></span></div>
+                <div class="badge">7А класс</div>
+            </div>
+            <button id="logoutBtn" class="btn btn-outline" style="width: auto;">Выйти</button>
+        </div>
+        
+        <div class="card">
+            <div class="flex-between">
+                <strong>⭐ Мои оценки</strong>
+            </div>
+            <div id="gradesList" style="margin-top: 16px;"></div>
+        </div>
+        
+        <div class="card">
+            <div class="flex-between">
+                <strong>📖 Домашнее задание</strong>
+            </div>
+            <div id="homeworkList" style="margin-top: 16px;"></div>
+        </div>
+        
+        <div class="card">
+            <div class="flex-between">
+                <strong>📅 Расписание</strong>
+            </div>
+            <div id="scheduleList" style="margin-top: 16px;"></div>
+        </div>
+    </div>
+    
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/student.js"></script>
+</body>
+</html>

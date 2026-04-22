@@ -1,0 +1,15 @@
+/* Стили для страницы ученика */
+#gradesList .grade {
+    font-size: 16px;
+    padding: 8px 14px;
+}
+
+#homeworkList .card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+}
+
+#scheduleList .badge {
+    background: #e0e7ff;
+    color: #4f46e5;
+}

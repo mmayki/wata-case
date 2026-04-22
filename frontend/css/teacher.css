@@ -1,0 +1,20 @@
+/* Стили для учителя */
+.grade-form {
+    display: grid;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.grade-form select,
+.grade-form input,
+.grade-form textarea {
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    font-size: 14px;
+}
+
+#homeworkPreview {
+    max-height: 400px;
+    overflow-y: auto;
+}
