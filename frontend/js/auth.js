@@ -45,7 +45,7 @@ async function handleLogin() {
 
     // Перенаправление
     if (data.user.role === "student") {
-      window.location.href = "student-dashboard.html";
+      window.location.href = 'student-dashboard.html';
     } else if (data.user.role === "teacher") {
       window.location.href = "teacher-dashboard.html";
     }

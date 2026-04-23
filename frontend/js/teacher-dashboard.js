@@ -1,26 +1,20 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  // Отображаем имя
   const userName = localStorage.getItem("userName");
   const userNameEl = document.getElementById("userName");
   if (userNameEl) userNameEl.textContent = userName;
 
-  // Загружаем учеников
   await loadStudents();
   await loadHomeworkPreview();
 
-  // Кнопка выхода
   const logoutBtn = document.getElementById("logoutBtn");
   if (logoutBtn) logoutBtn.addEventListener("click", logout);
 
-  // Форма добавления оценки
   const addGradeBtn = document.getElementById("addGradeBtn");
   if (addGradeBtn) addGradeBtn.addEventListener("click", addGrade);
 
-  // Форма добавления домашки
   const addHomeworkBtn = document.getElementById("addHomeworkBtn");
   if (addHomeworkBtn) addHomeworkBtn.addEventListener("click", addHomework);
 
-  // Обновление предпросмотра при смене класса
   const classSelect = document.getElementById("classSelect");
   if (classSelect) classSelect.addEventListener("change", loadHomeworkPreview);
 });

@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Показываем/скрываем поле класса
   const roleSelect = document.getElementById("role");
   const classGroup = document.getElementById("classGroup");
 
@@ -10,13 +9,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Кнопка регистрации
   const registerBtn = document.getElementById("registerBtn");
   if (registerBtn) {
     registerBtn.addEventListener("click", handleRegister);
   }
 
-  // Enter для отправки
   const inputs = ["fullName", "username", "password", "confirmPassword"];
   inputs.forEach((id) => {
     const input = document.getElementById(id);
@@ -39,11 +36,9 @@ async function handleRegister() {
   const errorDiv = document.getElementById("errorMessage");
   const successDiv = document.getElementById("successMessage");
 
-  // Скрываем старые сообщения
   errorDiv.style.display = "none";
   successDiv.style.display = "none";
 
-  // Валидация
   if (!fullName || !username || !password) {
     showError("Заполните все обязательные поля");
     return;
@@ -91,18 +86,15 @@ async function handleRegister() {
       throw new Error(data.error || "Ошибка регистрации");
     }
 
-    // Успех!
     successDiv.textContent =
       "✅ Регистрация успешна! Сейчас вы будете перенаправлены на страницу входа...";
     successDiv.style.display = "block";
 
-    // Очищаем форму
     document.getElementById("fullName").value = "";
     document.getElementById("username").value = "";
     document.getElementById("password").value = "";
     document.getElementById("confirmPassword").value = "";
 
-    // Перенаправляем на логин через 2 секунды
     setTimeout(() => {
       window.location.href = "login.html";
     }, 2000);

@@ -1,46 +1,92 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Дневник ученика</title>
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/student.css">
-</head>
-<body>
-    <div class="container">
-        <div class="flex-between" style="margin-bottom: 20px;">
-            <div>
-                <div class="header">👩‍🎓 <span id="userName"></span></div>
-                <div class="badge">7А класс</div>
-            </div>
-            <button id="logoutBtn" class="btn btn-outline" style="width: auto;">Выйти</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>Дашборд ученика</title>
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/student-dashboard.css" />
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <!-- Хедер -->
+      <div class="dashboard-header">
+        <div class="greeting">
+          <h1>Доброе утро, <span id="userName"></span></h1>
+          <p>Процент выполнения задач</p>
+          <p class="motivation">Продолжай в том же духе!</p>
         </div>
-        
+        <div class="progress-circle">
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="45" class="progress-bg" />
+            <circle
+              cx="50"
+              cy="50"
+              r="45"
+              class="progress-fill"
+              id="progressFill"
+            />
+            <text
+              x="50"
+              y="55"
+              text-anchor="middle"
+              class="progress-text"
+              id="progressPercent"
+            >
+              85%
+            </text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Таблица лидеров -->
+      <div class="card">
+        <div class="card-header">
+          <strong>🏆 Таблица лидеров</strong>
+        </div>
+        <div class="leaderboard">
+          <div class="leaderboard-header">
+            <span>№</span>
+            <span>Имя</span>
+            <span>Позиция</span>
+          </div>
+          <div id="leaderboardList"></div>
+        </div>
+      </div>
+
+      <!-- Задачи и расписание -->
+      <div class="two-columns">
+        <!-- Календарь задач -->
         <div class="card">
-            <div class="flex-between">
-                <strong>⭐ Мои оценки</strong>
-            </div>
-            <div id="gradesList" style="margin-top: 16px;"></div>
+          <div class="card-header">
+            <strong>📅 Задачи</strong>
+            <span class="month" id="currentMonth">Апрель 2026</span>
+          </div>
+          <div class="calendar-week" id="calendarWeek"></div>
+          <div class="task-filters">
+            <button class="filter-btn active" data-filter="all">Все</button>
+            <button class="filter-btn" data-filter="active">Выполняемые</button>
+          </div>
+          <div id="tasksList" class="tasks-list"></div>
         </div>
-        
+
+        <!-- Расписание на сегодня -->
         <div class="card">
-            <div class="flex-between">
-                <strong>📖 Домашнее задание</strong>
-            </div>
-            <div id="homeworkList" style="margin-top: 16px;"></div>
+          <div class="card-header">
+            <strong>⏰ Расписание на сегодня</strong>
+          </div>
+          <div class="schedule-timeline" id="scheduleTimeline"></div>
         </div>
-        
-        <div class="card">
-            <div class="flex-between">
-                <strong>📅 Расписание</strong>
-            </div>
-            <div id="scheduleList" style="margin-top: 16px;"></div>
-        </div>
+      </div>
+
+      <!-- Кнопка назад -->
+      <button id="backBtn" class="btn-back">← Назад</button>
     </div>
-    
+
     <script src="../js/api.js"></script>
-    <script src="../js/auth.js"></script>
-    <script src="../js/student.js"></script>
-</body>
+    <script src="../js/student-dashboard.js"></script>
+  </body>
 </html>
