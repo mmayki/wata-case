@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
-    <title>Вход - Школьный дневник</title>
+    <title>Вход</title>
     <link rel="stylesheet" href="../css/main.css" />
     <link rel="stylesheet" href="../css/login.css" />
   </head>
@@ -14,13 +14,14 @@
     <div class="login-container">
       <div class="login-card">
         <div class="login-icon">📚</div>
-        <h1 class="header" style="text-align: center">Школьный дневник</h1>
+        <h1 class="header" style="text-align: center">Авторизация</h1>
         <div class="subtitle" style="text-align: center">
           Войдите в свой аккаунт
         </div>
 
         <div id="errorMessage" class="error-message"></div>
 
+        <h4 class="input-title">Номер телефона / Эл. почта</h4>
         <input
           type="text"
           id="username"
@@ -28,6 +29,8 @@
           placeholder="Логин"
           autocomplete="off"
         />
+
+        <h4 class="input-title">Пароль</h4>
         <input
           type="password"
           id="password"
@@ -35,7 +38,15 @@
           placeholder="Пароль"
         />
 
+        <div class="subtitle">
+          <a href="#">Забыли пароль? Восстановить</a>
+        </div>
+
         <button id="loginBtn" class="btn">Войти</button>
+
+        <div class="subtitle">
+          <a href="#">Нет аккаунта? Зарегистрироваться</a>
+        </div>
 
         <div class="demo-info">
           <strong>📝 Демо-доступ:</strong><br />

@@ -22,6 +22,8 @@ async function loadGrades() {
   try {
     const grades = await apiRequest(`/grades/${userId}`);
 
+    console.log("Полученные оценки:", grades); // Для отладки
+
     if (!grades || grades.length === 0) {
       container.innerHTML = "<p>📭 Пока нет оценок</p>";
       return;
@@ -30,8 +32,10 @@ async function loadGrades() {
     // Группируем по предметам
     const grouped = {};
     grades.forEach((g) => {
-      if (!grouped[g.subject]) grouped[g.subject] = [];
-      grouped[g.subject].push(g.grade);
+      // Исправление: предмет может быть в g.subject или g.subjects?.name
+      const subjectName = g.subject || g.subjects?.name || "Без названия";
+      if (!grouped[subjectName]) grouped[subjectName] = [];
+      grouped[subjectName].push(g.grade);
     });
 
     let html = "";
@@ -68,6 +72,8 @@ async function loadHomework() {
       false,
     );
 
+    console.log("Полученное ДЗ:", homework);
+
     if (!homework || homework.length === 0) {
       container.innerHTML = "<p>📭 Нет домашнего задания</p>";
       return;
@@ -75,9 +81,11 @@ async function loadHomework() {
 
     let html = "";
     homework.forEach((h) => {
+      // Исправление: предмет может быть в h.subject или h.subjects?.name
+      const subjectName = h.subject || h.subjects?.name || "Без названия";
       html += `
                 <div class="homework-item">
-                    <strong>📚 ${h.subject}</strong>
+                    <strong>📚 ${subjectName}</strong>
                     <p style="margin-top: 8px;">${h.description}</p>
                     ${h.due_date ? `<small>📅 Срок: ${h.due_date}</small>` : ""}
                 </div>
@@ -103,6 +111,8 @@ async function loadSchedule() {
       false,
     );
 
+    console.log("Полученное расписание:", schedule);
+
     if (!schedule || schedule.length === 0) {
       container.innerHTML = "<p>📭 Нет расписания</p>";
       return;
@@ -119,8 +129,13 @@ async function loadSchedule() {
     const grouped = {};
 
     schedule.forEach((s) => {
+      // Исправление: предмет может быть в s.subject или s.subjects?.name
+      const subjectName = s.subject || s.subjects?.name || "Без названия";
       if (!grouped[s.day_of_week]) grouped[s.day_of_week] = [];
-      grouped[s.day_of_week].push(s);
+      grouped[s.day_of_week].push({
+        lesson_number: s.lesson_number,
+        subject: subjectName,
+      });
     });
 
     let html = "";

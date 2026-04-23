@@ -15,106 +15,174 @@ const supabase = createClient(
 
 const JWT_SECRET = "test_secret";
 
-// ТЕСТОВЫЙ РОУТ - проверим подключение к Supabase
-app.get("/api/test-users", async (req, res) => {
-  console.log("🔍 Запрос к /api/test-users");
-  try {
-    const { data, error } = await supabase.from("users").select("*");
-
-    console.log("📦 Данные:", data);
-    console.log("❌ Ошибка:", error);
-
-    res.json({
-      success: true,
-      count: data?.length || 0,
-      users: data,
-      error: error?.message,
-    });
-  } catch (err) {
-    console.error("Ошибка:", err);
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// ЛОГИН с детальным логированием
+// ============ ЛОГИН ============
 app.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
-  console.log("\n=================================");
-  console.log("🔐 ПОПЫТКА ВХОДА");
-  console.log("📝 Username:", username);
-  console.log("📝 Password:", password);
 
+  const { data: user, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("username", username)
+    .eq("plain_password", password)
+    .single();
+
+  if (error || !user) {
+    return res.status(401).json({ error: "Неверный логин или пароль" });
+  }
+
+  const token = jwt.sign(
+    { id: user.id, username: user.username, role: user.role },
+    JWT_SECRET,
+  );
+
+  res.json({
+    token,
+    user: {
+      id: user.id,
+      username: user.username,
+      full_name: user.full_name,
+      role: user.role,
+      class_name: user.class_name,
+    },
+  });
+});
+
+// ============ ОЦЕНКИ ============
+app.get("/api/grades/:studentId", async (req, res) => {
   try {
-    // Сначала проверим, какие вообще есть пользователи
-    const { data: allUsers, error: allError } = await supabase
-      .from("users")
-      .select("username, plain_password");
+    const { data, error } = await supabase
+      .from("grades")
+      .select("id, grade, date, subjects(name)")
+      .eq("student_id", req.params.studentId);
 
-    console.log("👥 Все пользователи в БД:", allUsers);
-
-    // Теперь ищем конкретного
-    const { data: user, error } = await supabase
-      .from("users")
-      .select("*")
-      .eq("username", username)
-      .maybeSingle(); // maybeSingle вместо single - не выбросит ошибку
-
-    console.log("🔍 Результат поиска пользователя:", user);
-    console.log("❌ Ошибка поиска:", error);
-
-    if (!user) {
-      console.log("❌ Пользователь НЕ НАЙДЕН");
-      return res.status(401).json({ error: "Пользователь не найден" });
-    }
-
-    console.log("✅ Пользователь НАЙДЕН:", user.username);
-    console.log("🔑 Пароль из БД:", user.plain_password);
-    console.log("🔑 Пароль из запроса:", password);
-    console.log("🔑 Совпадение:", user.plain_password === password);
-
-    // Проверяем пароль
-    if (user.plain_password !== password) {
-      console.log("❌ Пароль НЕ ПОДХОДИТ");
-      return res.status(401).json({ error: "Неверный пароль" });
-    }
-
-    console.log("✅ ПАРОЛЬ ВЕРНЫЙ!");
-
-    // Создаём токен
-    const token = jwt.sign(
-      { id: user.id, username: user.username, role: user.role },
-      JWT_SECRET,
-      { expiresIn: "24h" },
-    );
-
-    console.log("✅ Токен создан");
-    console.log("=================================\n");
-
-    res.json({
-      token,
-      user: {
-        id: user.id,
-        username: user.username,
-        full_name: user.full_name,
-        role: user.role,
-        class_name: user.class_name,
-      },
-    });
+    if (error) throw error;
+    res.json(data || []);
   } catch (err) {
-    console.error("❌ КРИТИЧЕСКАЯ ОШИБКА:", err);
     res.status(500).json({ error: err.message });
   }
 });
 
+// ============ ДОМАШКА ============
+app.get("/api/homework/:className", async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from("homework")
+      .select("id, description, due_date, subjects(name)")
+      .eq("class_name", req.params.className);
+
+    if (error) throw error;
+    res.json(data || []);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ============ РАСПИСАНИЕ ============
+app.get("/api/schedule/:className", async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from("schedule")
+      .select("day_of_week, lesson_number, subjects(name)")
+      .eq("class_name", req.params.className);
+
+    if (error) throw error;
+    res.json(data || []);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ============ СПИСОК УЧЕНИКОВ ============
+app.get("/api/students", async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from("users")
+      .select("id, full_name, class_name")
+      .eq("role", "student");
+
+    if (error) throw error;
+    res.json(data || []);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ============ ПОСТАВИТЬ ОЦЕНКУ ============
+app.post("/api/grades", async (req, res) => {
+  const { studentId, subjectName, grade } = req.body;
+
+  try {
+    let { data: subject } = await supabase
+      .from("subjects")
+      .select("id")
+      .eq("name", subjectName)
+      .single();
+
+    if (!subject) {
+      const { data: newSubject } = await supabase
+        .from("subjects")
+        .insert([{ name: subjectName }])
+        .select("id")
+        .single();
+      subject = newSubject;
+    }
+
+    await supabase.from("grades").insert([
+      {
+        student_id: studentId,
+        subject_id: subject.id,
+        grade: grade,
+        date: new Date().toISOString().split("T")[0],
+      },
+    ]);
+
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ============ ЗАДАТЬ ДОМАШКУ ============
+app.post("/api/homework", async (req, res) => {
+  const { className, subjectName, description, dueDate } = req.body;
+
+  try {
+    let { data: subject } = await supabase
+      .from("subjects")
+      .select("id")
+      .eq("name", subjectName)
+      .single();
+
+    if (!subject) {
+      const { data: newSubject } = await supabase
+        .from("subjects")
+        .insert([{ name: subjectName }])
+        .select("id")
+        .single();
+      subject = newSubject;
+    }
+
+    await supabase.from("homework").insert([
+      {
+        class_name: className,
+        subject_id: subject.id,
+        description: description,
+        due_date: dueDate || null,
+      },
+    ]);
+
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ============ HEALTH ============
 app.get("/api/health", (req, res) => {
-  res.json({ status: "ok", timestamp: new Date().toISOString() });
+  res.json({ status: "ok" });
 });
 
 const PORT = 3000;
 app.listen(PORT, () => {
-  console.log("\n=================================");
-  console.log(`✅ СЕРВЕР ЗАПУЩЕН`);
-  console.log(`📡 Порт: ${PORT}`);
-  console.log(`🔗 http://localhost:${PORT}`);
-  console.log("=================================\n");
+  console.log(`✅ Сервер на http://localhost:${PORT}`);
 });
