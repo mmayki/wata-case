@@ -18,13 +18,32 @@ const JWT_SECRET = "test_secret";
 // ============ ЛОГИН ============
 app.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
+  console.log("🔐 Логин:", username, "Пароль:", password);
 
+  // Сначала просто посмотрим, есть ли пользователь
+  const { data: userByName, error: nameError } = await supabase
+    .from("users")
+    .select("*")
+    .eq("username", username)
+    .maybeSingle();
+
+  console.log("👤 Пользователь по имени:", userByName);
+
+  if (!userByName) {
+    return res.status(401).json({ error: "Пользователь не найден" });
+  }
+
+  // Теперь проверяем пароль
   const { data: user, error } = await supabase
     .from("users")
     .select("*")
     .eq("username", username)
     .eq("plain_password", password)
-    .single();
+    .maybeSingle();
+
+  console.log("🔑 Результат проверки пароля:", user ? "Найден" : "Не найден");
+  console.log("📝 Пароль в БД:", userByName.plain_password);
+  console.log("📝 Введённый пароль:", password);
 
   if (error || !user) {
     return res.status(401).json({ error: "Неверный логин или пароль" });
@@ -45,6 +64,95 @@ app.post("/api/login", async (req, res) => {
       class_name: user.class_name,
     },
   });
+});
+
+// ============ РЕГИСТРАЦИЯ ============
+app.post("/api/register", async (req, res) => {
+  console.log("📥 ПОЛУЧЕН ЗАПРОС НА РЕГИСТРАЦИЮ");
+  console.log("📦 Тело запроса:", req.body);
+
+  const { full_name, username, password, role, class_name } = req.body;
+
+  // Проверяем, что все поля есть
+  if (!full_name || !username || !password || !role) {
+    console.log("❌ Ошибка: не все поля заполнены");
+    return res.status(400).json({ error: "Заполните все обязательные поля" });
+  }
+
+  try {
+    // Проверяем, существует ли пользователь
+    const { data: existing, error: checkError } = await supabase
+      .from("users")
+      .select("username")
+      .eq("username", username)
+      .maybeSingle();
+
+    console.log(
+      "🔍 Проверка существования:",
+      existing ? "Найден" : "Не найден",
+    );
+
+    if (existing) {
+      console.log("❌ Пользователь уже существует");
+      return res
+        .status(400)
+        .json({ error: "Пользователь с таким логином уже существует" });
+    }
+
+    // Создаём нового пользователя
+    const newUserData = {
+      username: username,
+      plain_password: password,
+      full_name: full_name,
+      role: role,
+      class_name: class_name || null,
+    };
+
+    console.log("📝 Данные для вставки:", newUserData);
+
+    const { data: newUser, error: insertError } = await supabase
+      .from("users")
+      .insert([newUserData])
+      .select("id, username, full_name, role, class_name")
+      .single();
+
+    if (insertError) {
+      console.error("❌ Ошибка вставки в БД:", insertError);
+      return res.status(500).json({ error: insertError.message });
+    }
+
+    console.log("✅ Пользователь зарегистрирован:", newUser);
+
+    res.status(201).json({
+      success: true,
+      message: "Регистрация успешна",
+      user: newUser,
+    });
+  } catch (err) {
+    console.error("❌ Критическая ошибка:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ============ ВОССТАНОВЛЕНИЕ ПАРОЛЯ ============
+app.post("/api/reset-password", async (req, res) => {
+  const { username, newPassword } = req.body;
+
+  try {
+    const { data, error } = await supabase
+      .from("users")
+      .update({ plain_password: newPassword })
+      .eq("username", username)
+      .select();
+
+    if (error || !data || data.length === 0) {
+      return res.status(404).json({ error: "Пользователь не найден" });
+    }
+
+    res.json({ success: true, message: "Пароль обновлён" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // ============ ОЦЕНКИ ============

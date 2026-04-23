@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/login.css" />
+  </head>
+  <body>
+    <div class="registr-container">
+      <div class="registr-card">
+        <div class="login-icon">📝</div>
+        <h1 class="header" style="text-align: center">Регистрация</h1>
+        <div class="subtitle" style="text-align: center">
+          Создайте новый аккаунт
+        </div>
+
+        <div id="errorMessage" class="error-message"></div>
+        <div id="successMessage" class="success-message"></div>
+
+        <h4 class="input-title">ФИО</h4>
+        <input
+          type="text"
+          id="fullName"
+          class="input"
+          placeholder="Иванова Иванна Ивановна"
+          autocomplete="off"
+        />
+
+        <h4 class="input-title">Логин</h4>
+        <input
+          type="text"
+          id="username"
+          class="input"
+          placeholder="Логин"
+          autocomplete="off"
+        />
+
+        <h4 class="input-title">Пароль</h4>
+        <input
+          type="password"
+          id="password"
+          class="input"
+          placeholder="Пароль"
+        />
+
+        <h4 class="input-title">Подтверждение пароля</h4>
+        <input
+          type="password"
+          id="confirmPassword"
+          class="input"
+          placeholder="Повторите пароль"
+        />
+
+        <h4 class="input-title">Роль</h4>
+        <select id="role" class="input">
+          <option value="student">Ученик</option>
+          <option value="teacher">Учитель</option>
+        </select>
+
+        <div id="classGroup" style="display: none">
+          <h4 class="input-title">Класс</h4>
+          <select id="className" class="input">
+            <option value="7А">7А</option>
+            <option value="7Б">7Б</option>
+            <option value="8А">8А</option>
+            <option value="8Б">8Б</option>
+            <option value="9А">9А</option>
+            <option value="9Б">9Б</option>
+          </select>
+        </div>
+
+        <button id="registerBtn" class="btn">Зарегистрироваться</button>
+
+        <div class="subtitle" style="text-align: center; margin-top: 20px">
+          <a href="login.html">Уже есть аккаунт? Войти</a>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/register.js"></script>
+  </body>
+</html>
