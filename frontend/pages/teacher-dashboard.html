@@ -1,60 +1,154 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Дневник учителя</title>
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/teacher.css">
-</head>
-<body>
-    <div class="container">
-        <div class="flex-between">
-            <div>
-                <div class="header">👩‍🏫 <span id="userName"></span></div>
-                <div class="badge">Учитель</div>
-            </div>
-            <button id="logoutBtn" class="btn btn-outline" style="width: auto;">Выйти</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>Дашборд учителя</title>
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/teacher-dashboard.css" />
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <!-- Хедер -->
+      <div class="dashboard-header">
+        <div class="greeting">
+          <h1>Доброе утро, <span id="userName"></span></h1>
+          <p class="subtitle">123123</p>
         </div>
-        
-        <div class="card">
-            <strong>➕ Поставить оценку</strong>
-            <div class="grade-form">
-                <select id="studentSelect"></select>
-                <input type="text" id="gradeSubject" placeholder="Предмет">
-                <select id="gradeValue">
-                    <option value="5">5 - Отлично</option>
-                    <option value="4">4 - Хорошо</option>
-                    <option value="3">3 - Удовлетворительно</option>
-                    <option value="2">2 - Неудовлетворительно</option>
-                </select>
-                <button id="addGradeBtn" class="btn">Поставить оценку</button>
-            </div>
+        <button id="logoutBtn" class="logout-btn">Выйти</button>
+      </div>
+
+      <!-- Статистика -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="studentsCount">0</div>
+          <div class="stat-label">Количество учеников</div>
         </div>
-        
+        <div class="stat-card">
+          <div class="stat-value" id="tasksCount">0</div>
+          <div class="stat-label">Активные задания</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="avgGrade">0</div>
+          <div class="stat-label">Средний балл учеников</div>
+        </div>
+      </div>
+
+      <!-- Колонки -->
+      <div class="two-columns">
         <div class="card">
+          <div class="card-header">
+            <strong>Поставить оценку</strong>
+          </div>
+          <div class="form-group">
+            <label>Ученик</label>
+            <select id="studentSelect" class="form-control"></select>
+          </div>
+          <div class="form-group">
+            <label>Предмет</label>
+            <input
+              type="text"
+              id="gradeSubject"
+              class="form-control"
+              placeholder="Например: Математика"
+              list="subjectsList"
+            />
+            <datalist id="subjectsList">
+              <option>Математика</option>
+              <option>Русский язык</option>
+              <option>Физика</option>
+              <option>История</option>
+              <option>Литература</option>
+              <option>Английский язык</option>
+            </datalist>
+          </div>
+          <div class="form-group">
+            <label>Оценка</label>
+            <select id="gradeValue" class="form-control">
+              <option value="5">5 - Отлично</option>
+              <option value="4">4 - Хорошо</option>
+              <option value="3">3 - Удовлетворительно</option>
+              <option value="2">2 - Неудовлетворительно</option>
+            </select>
+          </div>
+          <button id="addGradeBtn" class="btn-primary">
+            ⭐ Поставить оценку
+          </button>
+        </div>
+
+        <!-- Задать домашнее задание -->
+        <div class="card">
+          <div class="card-header">
             <strong>📝 Задать домашнее задание</strong>
-            <div class="grade-form">
-                <select id="classSelect">
-                    <option value="7А">7А класс</option>
-                    <option value="7Б">7Б класс</option>
-                    <option value="8А">8А класс</option>
-                </select>
-                <input type="text" id="homeworkSubject" placeholder="Предмет">
-                <textarea id="homeworkDesc" rows="3" placeholder="Описание задания..."></textarea>
-                <input type="date" id="dueDate">
-                <button id="addHomeworkBtn" class="btn">Задать домашнее задание</button>
-            </div>
+          </div>
+          <div class="form-group">
+            <label>Класс</label>
+            <select id="classSelect" class="form-control">
+              <option value="7А">7А класс</option>
+              <option value="7Б">7Б класс</option>
+              <option value="8А">8А класс</option>
+              <option value="8Б">8Б класс</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Предмет</label>
+            <input
+              type="text"
+              id="homeworkSubject"
+              class="form-control"
+              placeholder="Например: Математика"
+            />
+          </div>
+          <div class="form-group">
+            <label>Описание задания</label>
+            <textarea
+              id="homeworkDesc"
+              rows="3"
+              class="form-control"
+              placeholder="Подробное описание..."
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label>Срок сдачи</label>
+            <input type="date" id="dueDate" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label>Баллы за выполнение</label>
+            <input
+              type="number"
+              id="homeworkPoints"
+              class="form-control"
+              placeholder="10"
+              value="10"
+            />
+          </div>
+          <button id="addHomeworkBtn" class="btn-primary">
+            📖 Задать задание
+          </button>
         </div>
-        
-        <div class="card">
-            <strong>📖 Текущие задания</strong>
-            <div id="homeworkPreview" style="margin-top: 12px;"></div>
+      </div>
+
+      <!-- Текущие задания и успеваемость -->
+      <div class="card full-width">
+        <div class="card-header">
+          <strong>📋 Текущие задания</strong>
+          <span class="badge" id="homeworkCount">0</span>
         </div>
+        <div id="homeworkList" class="homework-list"></div>
+      </div>
+
+      <div class="card full-width">
+        <div class="card-header">
+          <strong>🏆 Успеваемость учеников</strong>
+        </div>
+        <div id="classStats" class="class-stats"></div>
+      </div>
     </div>
-    
+
     <script src="../js/api.js"></script>
-    <script src="../js/auth.js"></script>
-    <script src="../js/teacher.js"></script>
-</body>
+    <script src="../js/teacher-dashboard.js"></script>
+  </body>
 </html>

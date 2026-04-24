@@ -268,7 +268,7 @@ app.post("/api/grades", async (req, res) => {
 
 // ============ ЗАДАТЬ ДОМАШКУ ============
 app.post("/api/homework", async (req, res) => {
-  const { className, subjectName, description, dueDate } = req.body;
+  const { className, subjectName, description, dueDate, points } = req.body;
 
   try {
     let { data: subject } = await supabase
@@ -296,6 +296,93 @@ app.post("/api/homework", async (req, res) => {
     ]);
 
     res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+
+  await supabase.from("homework").insert([
+    {
+      class_name: className,
+      subject_id: subject.id,
+      description: description,
+      due_date: dueDate || null,
+      points: points || 10,
+    },
+  ]);
+});
+
+// ============ ПОЛУЧИТЬ БАЛЛЫ ПОЛЬЗОВАТЕЛЯ ============
+app.get("/api/user-points/:userId", async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from("user_points")
+      .select("points")
+      .eq("user_id", req.params.userId)
+      .single();
+
+    if (error && error.code !== "PGRST116") throw error;
+    res.json({ points: data?.points || 0 });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ============ ОБНОВИТЬ БАЛЛЫ ПОЛЬЗОВАТЕЛЯ ============
+app.post("/api/user-points", async (req, res) => {
+  const { userId, points } = req.body;
+
+  try {
+    // Проверяем, есть ли запись
+    const { data: existing } = await supabase
+      .from("user_points")
+      .select("id")
+      .eq("user_id", userId)
+      .single();
+
+    let result;
+    if (existing) {
+      // Обновляем существующую
+      result = await supabase
+        .from("user_points")
+        .update({ points, updated_at: new Date() })
+        .eq("user_id", userId);
+    } else {
+      // Создаём новую
+      result = await supabase
+        .from("user_points")
+        .insert([{ user_id: userId, points }]);
+    }
+
+    if (result.error) throw result.error;
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ============ ТАБЛИЦА ЛИДЕРОВ (все пользователи с баллами) ============
+app.get("/api/leaderboard", async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from("user_points")
+      .select(
+        `
+                points,
+                users!inner (id, full_name, role)
+            `,
+      )
+      .eq("users.role", "student")
+      .order("points", { ascending: false });
+
+    if (error) throw error;
+
+    const formatted = (data || []).map((item) => ({
+      id: item.users.id,
+      full_name: item.users.full_name,
+      points: item.points || 0,
+    }));
+
+    res.json(formatted);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
