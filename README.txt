@@ -4,6 +4,24 @@
 ==================================================================
 
 
+-- ЗАПУСК
+1. Установите Node.js (если не установлен): 
+   https://nodejs.org/
+2. Откройте терминал и перейдите в папку backend:
+   cd backend
+3. Установите зависимости:
+   npm install
+4. Создайте файл .env в папке backend с содержимым:
+   PORT=3000
+   JWT_SECRET=hackathon_secret_2024
+   SUPABASE_URL=https://ваш-проект.supabase.co
+   SUPABASE_ANON_KEY=ваш-anon-ключ
+5. Запустите сервер:
+   node server.js
+6. Откройте в браузере:
+   frontend/index.html (через Live Server)
+
+
 -- ТЕХНОЛОГИИ
 Frontend:      HTML5, CSS3, JavaScript (Vanilla)
 Backend:       Node.js + Express
