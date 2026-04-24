@@ -190,12 +190,28 @@ app.get("/api/schedule/:className", async (req, res) => {
   try {
     const { data, error } = await supabase
       .from("schedule")
-      .select("day_of_week, lesson_number, subjects(name)")
+      .select(
+        `
+                day_of_week,
+                lesson_number,
+                subject_id,
+                subjects!inner (name)
+            `,
+      )
       .eq("class_name", req.params.className);
 
     if (error) throw error;
-    res.json(data || []);
+
+    const formatted = (data || []).map((s) => ({
+      day_of_week: s.day_of_week,
+      lesson_number: s.lesson_number,
+      subject: s.subjects?.name || "Неизвестный предмет",
+    }));
+
+    console.log("📅 Расписание для", req.params.className, ":", formatted);
+    res.json(formatted);
   } catch (err) {
+    console.error("Ошибка расписания:", err);
     res.status(500).json({ error: err.message });
   }
 });

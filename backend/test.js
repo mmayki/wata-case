@@ -6,7 +6,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Тестовые пользователи
 const users = [
   {
     id: 1,
@@ -49,7 +48,6 @@ app.post("/api/login", (req, res) => {
   });
 });
 
-// Оценки
 app.get("/api/grades/:studentId", (req, res) => {
   res.json([
     { id: 1, grade: 5, date: "2024-04-20", subject: "Математика" },
@@ -57,7 +55,6 @@ app.get("/api/grades/:studentId", (req, res) => {
   ]);
 });
 
-// Домашка
 app.get("/api/homework/:className", (req, res) => {
   res.json([
     {
@@ -75,7 +72,6 @@ app.get("/api/homework/:className", (req, res) => {
   ]);
 });
 
-// Расписание
 app.get("/api/schedule/:className", (req, res) => {
   res.json([
     { day_of_week: 1, lesson_number: 1, subject: "Математика" },
@@ -83,7 +79,6 @@ app.get("/api/schedule/:className", (req, res) => {
   ]);
 });
 
-// Студенты
 app.get("/api/students", (req, res) => {
   res.json([{ id: 1, full_name: "Алиса С.", class_name: "7А" }]);
 });

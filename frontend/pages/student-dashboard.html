@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
-    <title>Дашборд ученика</title>
+    <title>Главная</title>
     <link rel="stylesheet" href="../css/main.css" />
     <link rel="stylesheet" href="../css/student-dashboard.css" />
   </head>
@@ -16,29 +16,76 @@
       <div class="dashboard-header">
         <div class="greeting">
           <h1>Доброе утро, <span id="userName"></span></h1>
-          <p>Процент выполнения задач</p>
-          <p class="motivation">Продолжай в том же духе!</p>
+          <div class="stats-row">
+            <div class="stat-card">
+              <div class="stat-value" id="userScore">67</div>
+              <div class="stat-label">⭐ Всего баллов</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="todayScore">0</div>
+              <div class="stat-label">📅 Баллов за сегодня</div>
+            </div>
+          </div>
         </div>
-        <div class="progress-circle">
-          <svg viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="45" class="progress-bg" />
-            <circle
-              cx="50"
-              cy="50"
-              r="45"
-              class="progress-fill"
-              id="progressFill"
-            />
-            <text
-              x="50"
-              y="55"
-              text-anchor="middle"
-              class="progress-text"
-              id="progressPercent"
-            >
-              85%
-            </text>
-          </svg>
+        <div class="progress-card">
+          <div class="progress-label">Процент выполнения задач</div>
+          <div class="progress-motivation">Продолжай в том же духе!</div>
+          <div class="progress-circle-wrapper">
+            <div class="progress-circle-small">
+              <svg viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="42" class="progress-bg-small" />
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="42"
+                  class="progress-fill-small"
+                  id="progressFillSmall"
+                />
+                <text
+                  x="50"
+                  y="55"
+                  text-anchor="middle"
+                  class="progress-text-small"
+                  id="progressPercentSmall"
+                >
+                  85%
+                </text>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Задачи и расписание -->
+      <div class="two-columns">
+        <!-- Календарь задач -->
+        <div class="card">
+          <div class="card-header">
+            <strong>📅 Задачи</strong>
+            <div class="month-nav">
+              <button id="prevMonth" class="month-nav-btn">←</button>
+              <span class="month" id="currentMonth">Апрель 2026</span>
+              <button id="nextMonth" class="month-nav-btn">→</button>
+            </div>
+          </div>
+          <div class="calendar-week" id="calendarWeek"></div>
+          <div class="task-filters">
+            <button class="filter-btn active" data-filter="all">Все</button>
+            <button class="filter-btn" data-filter="active">
+              Не выполнено
+            </button>
+          </div>
+          <div id="tasksList" class="tasks-list"></div>
+          <button id="addTaskBtn" class="add-task-btn">
+            + Добавить задачу
+          </button>
+        </div>
+
+        <!-- Расписание на сегодня -->
+        <div class="card">
+          <div class="card-header">
+            <strong>⏰ Расписание на сегодня</strong>
+          </div>
+          <div class="schedule-timeline" id="scheduleTimeline"></div>
         </div>
       </div>
 
@@ -51,34 +98,9 @@
           <div class="leaderboard-header">
             <span>№</span>
             <span>Имя</span>
-            <span>Позиция</span>
+            <span>Средний балл</span>
           </div>
           <div id="leaderboardList"></div>
-        </div>
-      </div>
-
-      <!-- Задачи и расписание -->
-      <div class="two-columns">
-        <!-- Календарь задач -->
-        <div class="card">
-          <div class="card-header">
-            <strong>📅 Задачи</strong>
-            <span class="month" id="currentMonth">Апрель 2026</span>
-          </div>
-          <div class="calendar-week" id="calendarWeek"></div>
-          <div class="task-filters">
-            <button class="filter-btn active" data-filter="all">Все</button>
-            <button class="filter-btn" data-filter="active">Выполняемые</button>
-          </div>
-          <div id="tasksList" class="tasks-list"></div>
-        </div>
-
-        <!-- Расписание на сегодня -->
-        <div class="card">
-          <div class="card-header">
-            <strong>⏰ Расписание на сегодня</strong>
-          </div>
-          <div class="schedule-timeline" id="scheduleTimeline"></div>
         </div>
       </div>
 

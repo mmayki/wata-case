@@ -141,6 +141,35 @@ body {
   margin-top: 50px;
 }
 
+/* Дополнительные стили для дашборда */
+.card-header strong {
+  font-size: 18px;
+}
+
+.leaderboard-rank {
+  font-weight: bold;
+}
+
+.progress-text {
+  font-size: 18px;
+}
+
+/* Анимации */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dashboard-container {
+  animation: fadeIn 0.3s ease;
+}
+
 /* Адаптивность */
 @media (max-width: 480px) {
   body {

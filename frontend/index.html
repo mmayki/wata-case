@@ -16,19 +16,16 @@
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
     <script>
-      // Проверяем, есть ли сохранённый токен
       const token = localStorage.getItem("token");
       const userRole = localStorage.getItem("userRole");
 
       if (token && userRole) {
-        // Если есть токен - перенаправляем на соответствующую страницу
         if (userRole === "student") {
           window.location.href = "pages/student-dashboard.html";
         } else if (userRole === "teacher") {
           window.location.href = "pages/teacher-dashboard.html";
         }
       } else {
-        // Нет токена - на страницу логина
         window.location.href = "pages/login.html";
       }
     </script>
